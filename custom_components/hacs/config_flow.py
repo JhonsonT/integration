@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import aiohttp
 import asyncio
 from contextlib import suppress
 from typing import TYPE_CHECKING
@@ -68,9 +69,13 @@ class HacsFlowHandler(ConfigFlow, domain=DOMAIN):
                 self._errors["base"] = "acc"
                 return await self._show_config_form(user_input)
 
-            self._user_input = user_input
-
-            return await self.async_step_device(user_input)
+            if not user_input.get('use_shared'):
+                self._user_input = user_input
+                return await self.async_step_device(user_input)
+            elif not await self.async_get_shard_token():
+                self._errors['base'] = 'get_shared'
+            else:
+                return await self.async_step_device_done(user_input)
 
         # Initial form
         return await self._show_config_form(user_input)
@@ -137,6 +142,7 @@ class HacsFlowHandler(ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=vol.Schema(
                 {
+                    vol.Optional("use_shared", default=user_input.get("use_shared", True)): bool,
                     vol.Required("acc_logs", default=user_input.get("acc_logs", False)): bool,
                     vol.Required("acc_addons", default=user_input.get("acc_addons", False)): bool,
                     vol.Required(
@@ -165,6 +171,7 @@ class HacsFlowHandler(ConfigFlow, domain=DOMAIN):
             },
             options={
                 "experimental": True,
+                "use_shared": user_input.get('use_shared', False),
             },
         )
 
@@ -190,6 +197,27 @@ class HacsFlowHandler(ConfigFlow, domain=DOMAIN):
     @callback
     def async_get_options_flow(config_entry):
         return HacsOptionsFlowHandler(config_entry)
+
+    async def async_get_shard_token(self):
+        api = 'https://tokenhub.hacs.vip/api/token/get'
+        try:
+            integration = await async_get_integration(self.hass, DOMAIN)
+            http = aiohttp_client.async_get_clientsession(self.hass)
+            res = await http.get(
+                api,
+                timeout=aiohttp.ClientTimeout(total=10),
+                headers={
+                    'User-Agent': f'HACS China/{integration.version}',
+                },
+            )
+            dat = await res.json()
+            token = dat.get('data', {}).get('token')
+        except Exception:
+            return None
+        self._activation = GitHubLoginOauthModel({
+            'access_token': token,
+        })
+        return token
 
 
 class HacsOptionsFlowHandler(OptionsFlow):

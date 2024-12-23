@@ -9,11 +9,13 @@
         },
         "error": {
             "auth": "Personal Access Token is not correct",
-            "acc": "You need to acknowledge all the statements before continuing"
+            "acc": "You need to acknowledge all the statements before continuing",
+            "get_shared": "Get shared token failed, please try again"
         },
         "step": {
             "user": {
                 "data": {
+                    "use_shared": "Use shared github token",
                     "acc_logs": "I know how to access Home Assistant logs",
                     "acc_addons": "I know that there are no add-ons in HACS",
                     "acc_untested": "I know that everything inside HACS including HACS itself is custom and untested by Home Assistant",

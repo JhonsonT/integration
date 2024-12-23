@@ -8,11 +8,13 @@
         },
         "error": {
             "auth": "个人访问令牌不正确",
-            "acc": "在继续之前，您需要勾选确认上一步的所有声明"
+            "acc": "在继续之前，您需要勾选确认上一步的所有声明",
+            "get_shared": "获取共享的Github令牌失败，请重试"
         },
         "step": {
             "user": {
                 "data": {
+                    "use_shared": "使用共享的Github令牌(免登录)",
                     "acc_logs": "我知道如何查看 Home Assistant 日志",
                     "acc_addons": "我知道 HACS 中没有 Supervised 附加组件(add-ons)",
                     "acc_untested": "我知道 HACS 中的一切都是由社区开发/维护，未经 Home Assistant 官方的测试",
