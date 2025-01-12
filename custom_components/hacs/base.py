@@ -691,6 +691,11 @@ class HacsBase:
             return None
 
         mirrors = {
+            "hacs-china": {
+                "raw": "https://ghrp2.hacs.vip/raw",
+                "archive": "https://ghrp2.hacs.vip",
+                "release": "https://ghrp2.hacs.vip",
+            },
             "hacs.vip": {
                 "raw": "https://ghrp.hacs.vip/raw",
                 "archive": "https://ghrp.hacs.vip",
