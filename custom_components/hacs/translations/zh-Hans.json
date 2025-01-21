@@ -7,7 +7,7 @@
             "not_setup": "HACS 未安装"
         },
         "error": {
-            "auth": "个人访问令牌不正确",
+            "auth": "Github令牌不正确",
             "acc": "在继续之前，您需要勾选确认上一步的所有声明",
             "get_shared": "获取共享的Github令牌失败，请重试"
         },
@@ -25,6 +25,10 @@
             },
             "device": {
                 "title": "等待设备激活"
+            },
+            "reauth_confirm": {
+                "title": "需要重新授权",
+                "description": "Github令牌已失效，需要重新授权"
             }
         },
         "progress": {
@@ -34,6 +38,7 @@
     "options": {
         "abort": {
             "not_setup": "HACS 未安装",
+            "pending_tasks": "任务正在进行中，请稍后再试",
             "release_limit_value": "版本数量限制在1到100"
         },
         "step": {
@@ -52,6 +57,34 @@
                     "github_api_custom": "自定义 Github API (如: https://ghapi.hacs.vip)"
                 }
             }
+        }
+    },
+    "issues": {
+        "restart_required": {
+            "title": "需要重启",
+            "fix_flow": {
+                "step": {
+                    "confirm_restart": {
+                        "title": "需要重启",
+                        "description": "重启 Home Assistant 以完成安装或更新 {name}，点击提交立即重启"
+                    }
+                }
+            }
+        },
+        "removed": {
+            "title": "仓库已从 HACS 移除",
+            "description": "因为 {reason}, `{name}` 已从 HACS 移除， 请访问 [HACS 面板](/hacs/repository/{repositry_id}) 去移除它。"
+        }
+    },
+    "entity": {
+        "switch": {
+        "pre-release": {
+            "name": "预发布",
+            "state": {
+            "off": "无预发布",
+            "on": "预发布优先"
+            }
+        }
         }
     }
 }
