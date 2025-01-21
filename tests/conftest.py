@@ -10,9 +10,9 @@ import logging
 import os
 import shutil
 from typing import Any
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, _patch, patch
 
-from _pytest.assertion.util import _compare_eq_iterable
+from aiohttp import AsyncResolver
 from awesomeversion import AwesomeVersion
 import freezegun
 from homeassistant import loader
@@ -52,8 +52,6 @@ from tests.common import (
     ProxyClientSession,
     ResponseMocker,
     WSClient,
-    async_test_home_assistant_dev,
-    async_test_home_assistant_min_version,
     client_session_proxy,
     create_config_entry,
     dummy_repository_base,
@@ -62,6 +60,12 @@ from tests.common import (
     recursive_remove_key,
     safe_json_dumps,
     setup_integration as common_setup_integration,
+)
+from tests.homeassistantfixtures.dev import (
+    async_test_home_assistant as async_test_home_assistant_dev,
+)
+from tests.homeassistantfixtures.min import (
+    async_test_home_assistant as async_test_home_assistant_min_version,
 )
 
 # Set default logger
@@ -103,6 +107,23 @@ def hass_storage():
     """Fixture to mock storage."""
     with mock_storage() as stored_data:
         yield stored_data
+
+
+@pytest.fixture(autouse=True, scope="session")
+def mock_zeroconf_resolver() -> Generator[_patch]:
+    """Mock out the zeroconf resolver."""
+    if AwesomeVersion(HA_VERSION) < "2025.2.0dev0":
+        yield None
+    else:
+        patcher = patch(
+            "homeassistant.helpers.aiohttp_client._async_make_resolver",
+            return_value=AsyncResolver(),
+        )
+        patcher.start()
+        try:
+            yield patcher
+        finally:
+            patcher.stop()
 
 
 @pytest.fixture
@@ -261,7 +282,7 @@ def snapshots(snapshot: Snapshot) -> SnapshotFixture:
             state = hacs.hass.states.get(entity.entity_id)
             return {
                 "state": state.state if state else None,
-                "attributes": state.attributes if state else None,
+                "attributes": recursive_remove_key(state.attributes, ("display_precision", "update_percentage")) if state else None,
             }
 
         snapshot.assert_match(
