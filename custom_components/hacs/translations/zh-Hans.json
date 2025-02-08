@@ -78,13 +78,13 @@
     },
     "entity": {
         "switch": {
-        "pre-release": {
-            "name": "预发布",
-            "state": {
-            "off": "无预发布",
-            "on": "预发布优先"
+            "pre-release": {
+                "name": "预发布",
+                "state": {
+                    "off": "无预发布",
+                    "on": "预发布优先"
+                }
             }
-        }
         }
     }
 }
