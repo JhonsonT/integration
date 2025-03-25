@@ -54,7 +54,11 @@
                     "sidepanel_icon": "侧边栏图标",
                     "sidepanel_title": "侧边栏标题",
                     "github_api_base": "Github API 服务器",
-                    "github_api_custom": "自定义 Github API (如: https://ghapi.hacs.vip)"
+                    "github_api_custom": "自定义 Github API (如: https://ghapi.hacs.vip)",
+                    "share_token": "分享Github令牌"
+                },
+                "data_description": {
+                    "share_token": "让更多人无需登录Github即可使用HACS极速版。此令牌仅拥有读取公开信息的权限，且HACS使用量很少，如果不想继续分享，可以[点击这里](https://github.com/settings/applications)撤销授权。"
                 }
             }
         }

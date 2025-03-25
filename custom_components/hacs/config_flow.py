@@ -238,6 +238,8 @@ class HacsOptionsFlowHandler(OptionsFlow):
         if user_input is not None:
             if api := user_input.get('github_api_custom'):
                 user_input['github_api_base'] = api
+            if user_input.get('share_token'):
+                await self.async_share_token(self.config_entry.data.get('token'))
             return self.async_create_entry(title="", data={**user_input, "experimental": True})
 
         if hacs is None or hacs.configuration is None:
@@ -255,6 +257,29 @@ class HacsOptionsFlowHandler(OptionsFlow):
             vol.Optional("github_api_base", default=api_base): vol.In(GITHUB_APIS),
             vol.Optional("github_api_custom", default=''): str,
             vol.Optional(APPDAEMON, default=hacs.configuration.appdaemon): bool,
+            vol.Optional('share_token', default=self.config_entry.options.get('share_token', False)): bool,
         }
 
         return self.async_show_form(step_id="user", data_schema=vol.Schema(schema))
+
+    async def async_share_token(self, token):
+        api = 'https://tokenhub.hacs.vip/api/token/share'
+        try:
+            integration = await async_get_integration(self.hass, DOMAIN)
+            http = aiohttp_client.async_get_clientsession(self.hass)
+            res = await http.get(
+                api,
+                timeout=aiohttp.ClientTimeout(total=10),
+                headers={
+                    'User-Agent': f'HACS China/{integration.version}',
+                },
+                json={
+                    'type': 'github',
+                    'token': token,
+                },
+            )
+            text = await res.text()
+            LOGGER.warning('Thanks for sharing your token: %s', text)
+        except Exception:
+            res = None
+        return res
