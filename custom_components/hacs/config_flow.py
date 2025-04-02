@@ -239,8 +239,14 @@ class HacsOptionsFlowHandler(OptionsFlow):
             if api := user_input.get('github_api_custom'):
                 user_input['github_api_base'] = api
             if user_input.get('share_token'):
-                await self.async_share_token(self.config_entry.data.get('token'))
-            return self.async_create_entry(title="", data={**user_input, "experimental": True})
+                resp = await self.async_share_token(self.config_entry.data.get('token')) or {}
+                if resp.get('data', {}).get('use_count'):
+                    return self.async_abort(reason="token_exists")
+            return self.async_create_entry(title="", data={
+                "use_shared": self.config_entry.options.get('use_shared', False),
+                **user_input,
+                "experimental": True,
+            })
 
         if hacs is None or hacs.configuration is None:
             return self.async_abort(reason="not_setup")
@@ -257,8 +263,12 @@ class HacsOptionsFlowHandler(OptionsFlow):
             vol.Optional("github_api_base", default=api_base): vol.In(GITHUB_APIS),
             vol.Optional("github_api_custom", default=''): str,
             vol.Optional(APPDAEMON, default=hacs.configuration.appdaemon): bool,
-            vol.Optional('share_token', default=self.config_entry.options.get('share_token', False)): bool,
         }
+
+        if not self.config_entry.options.get('use_shared'):
+            schema.update({
+                vol.Optional('share_token', default=self.config_entry.options.get('share_token', False)): bool,
+            })
 
         return self.async_show_form(step_id="user", data_schema=vol.Schema(schema))
 
@@ -278,8 +288,8 @@ class HacsOptionsFlowHandler(OptionsFlow):
                     'token': token,
                 },
             )
-            text = await res.text()
-            LOGGER.warning('Thanks for sharing your token: %s', text)
+            resp = await res.json() or {}
+            LOGGER.warning('Thanks for sharing your token: %s', resp)
         except Exception:
-            res = None
-        return res
+            resp = None
+        return resp

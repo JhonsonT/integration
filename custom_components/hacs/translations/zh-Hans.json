@@ -39,7 +39,8 @@
         "abort": {
             "not_setup": "HACS 未安装",
             "pending_tasks": "任务正在进行中，请稍后再试",
-            "release_limit_value": "版本数量限制在1到100"
+            "release_limit_value": "版本数量限制在1到100",
+            "token_exists": "该Github令牌已经被分享过了"
         },
         "step": {
             "user": {
@@ -58,7 +59,7 @@
                     "share_token": "分享Github令牌"
                 },
                 "data_description": {
-                    "share_token": "让更多人无需登录Github即可使用HACS极速版。此令牌仅拥有读取公开信息的权限，且HACS使用量很少，如果不想继续分享，可以[点击这里](https://github.com/settings/applications)撤销授权。"
+                    "share_token": "让更多人无需登录Github即可使用HACS极速版。此令牌仅拥有读取公开信息的权限，且HACS使用量很少，如果不想继续分享，可以[点击这里](https://github.com/settings/applications)并对HACS撤销授权。"
                 }
             }
         }
