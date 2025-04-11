@@ -21,7 +21,7 @@
                     "acc_disable": "我知道如果我的 Home Assistant 出现问题，我应该禁用自定义集成"
                 },
                 "data_description": {
-                    "use_shared": "共享令牌禁止商业用途的 Home Assistant 使用，或在[共享令牌](https://tokenhub.hacs.vip)后使用"
+                    "use_shared": "共享令牌禁止商业用途的 Home Assistant 使用，或在[共享新令牌](https://tokenhub.hacs.vip)后使用"
                 },
                 "description": "在安装 HACS 之前，您需要确认以下声明",
                 "title": "HACS 极速版"
