@@ -17,8 +17,11 @@
                     "use_shared": "使用共享的Github令牌(免登录)",
                     "acc_logs": "我知道如何查看 Home Assistant 日志",
                     "acc_addons": "我知道 HACS 中没有 Supervised 附加组件(add-ons)",
-                    "acc_untested": "我知道 HACS 中的一切都是由社区开发/维护，未经 Home Assistant 官方的测试",
-                    "acc_disable": "我知道如果我的 Home Assistant 遇到的问题，我应该禁用自定义插件"
+                    "acc_untested": "我知道 HACS 中的一切都是由社区开发/维护，未经 Home Assistant 官方测试",
+                    "acc_disable": "我知道如果我的 Home Assistant 出现问题，我应该禁用自定义集成"
+                },
+                "data_description": {
+                    "use_shared": "共享令牌禁止商业用途的 Home Assistant 使用，或在[共享令牌](https://tokenhub.hacs.vip)后使用"
                 },
                 "description": "在安装 HACS 之前，您需要确认以下声明",
                 "title": "HACS 极速版"
