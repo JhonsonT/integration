@@ -745,6 +745,7 @@ class HacsBase:
             url = url.replace("tags/", "")
 
         src = url.replace("//github.com/hacs/integration", "//github.com/hacs-china/integration")
+        status_code = None
         from math import ceil
 
         while tries_left > 0:
@@ -756,6 +757,8 @@ class HacsBase:
                 url = url.replace("https://github.com/", f"{mirror['release']}/")
             elif "/archive/" in url:
                 url = url.replace("https://github.com/", f"{mirror['archive']}/")
+                if status_code == 404:
+                    url = url.replace("/refs/tags/", "/")
             else:
                 url = url.replace("https://raw.githubusercontent.com/", f"{mirror['raw']}/")
 
@@ -771,6 +774,7 @@ class HacsBase:
                 # Make sure that we got a valid result
                 if request.status == 200:
                     return await request.read()
+                status_code = request.status
 
                 raise HacsException(
                     f"Got status code {
